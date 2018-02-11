@@ -1,0 +1,4 @@
+
+This repository contains a Unity project with a native plugin wrapping iOS safe areas API. The 
+Test.unity scene contains a basic UI example that demonstrates the safe area on a particular iOS
+device and its orientation.
