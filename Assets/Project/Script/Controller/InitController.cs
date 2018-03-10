@@ -1,0 +1,90 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
+using System.Text;
+using UnityEngine.SceneManagement;
+
+public class InitController : MonoBehaviour {
+
+	//canvas管理
+	public GameObject loadingCanvas;
+	public GameObject singinCanvas;
+	public GameObject loginCanvas;
+
+	//文字入力管理
+	public InputField useridInput;
+	public InputField passInput;
+
+	//ボタン管理
+	public GameObject loginButton;
+	public GameObject messageButton;
+
+	//テキスト管理
+	public Text messageText;
+
+	// Use this for initialization
+	void Start () {
+		ViewLoading ();
+
+		Invoke("ViewLogin", 1.0f);
+	}
+	
+	// Update is called once per frame
+	void Update () {
+	}
+
+	/// <summary>
+	/// ログイン処理
+	/// </summary>
+	public void PushLoginButton(){
+		User model = new User ();
+		model.username = useridInput.text;
+		model.password = passInput.text;
+
+		HttpConector http = new HttpConector ();
+		HttpItem r = http.Post (Const.LOGIN_URL,JsonUtility.ToJson (model));
+		Debug.Log (r.code);
+		Debug.Log (r.body);
+
+		if (r.code == 200) {
+			SceneManager.LoadScene ("ListScene"); 
+		} else {
+			ViewMessage("ログインに失敗しました。。");
+		}
+	}
+		
+	/// <summary>
+	/// メッセージ消す 
+	/// </summary>
+	public void PushMessageButton ()
+	{
+		messageButton.SetActive (false);
+	}
+
+
+/**private**/
+	private void ViewMessage (string msg)
+	{
+		messageButton.SetActive (true);
+		messageText.text = msg;
+	}
+		
+	private void ViewLoading () {
+		loadingCanvas.SetActive (true);
+		singinCanvas.SetActive (false);
+		loginCanvas.SetActive (false);
+	}
+	private void ViewSingin () {
+		loadingCanvas.SetActive (false);
+		singinCanvas.SetActive (true);
+		loginCanvas.SetActive (false);
+	}
+	private void ViewLogin () {
+		loadingCanvas.SetActive (false);
+		singinCanvas.SetActive (false);
+		loginCanvas.SetActive (true);
+	}
+
+}

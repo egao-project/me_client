@@ -13,7 +13,7 @@ public class LoginViewController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		LoginButton.onClick.AddListener (Login);
+		//LoginButton.onClick.AddListener (Login);
 	}
 	
 	// Update is called once per frame
@@ -24,6 +24,6 @@ public class LoginViewController : MonoBehaviour {
 	//ログイン処理
 	//TODO:バリデートの方法の確認
 	void Login(){
-		SceneManager.LoadScene("ListScene"); 
+		//SceneManager.LoadScene("ListScene"); 
 	}
 }
