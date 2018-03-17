@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 using System.Text;
 using UnityEngine.SceneManagement;
 
-public class InitController : MonoBehaviour {
+public class InitController : BaseController {
 
 	//canvas管理
 	[SerializeField] private GameObject loadingCanvas;
@@ -25,7 +25,7 @@ public class InitController : MonoBehaviour {
 	[SerializeField] private Text messageText;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		ViewLoading ();
 
 		Invoke("ViewLogin", 1.0f);
@@ -49,6 +49,10 @@ public class InitController : MonoBehaviour {
 		Debug.Log (r.body);
 
 		if (r.code == 200) {
+			User u = JsonUtility.FromJson<User> (r.body);
+			u.username = useridInput.text;
+			u.password = passInput.text;
+			BaseController.SetUser(u);
 			SceneManager.LoadScene ("ListScene"); 
 		} else {
 			ViewMessage("ログインに失敗しました。。");
