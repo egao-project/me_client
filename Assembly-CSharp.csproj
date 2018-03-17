@@ -51,10 +51,12 @@
      <Compile Include="Assets\LoginViewController.cs" />
      <Compile Include="Assets\Project\Script\Controller\BaseController.cs" />
      <Compile Include="Assets\Project\Script\Controller\InitController.cs" />
+     <Compile Include="Assets\Project\Script\Controller\ListController.cs" />
      <Compile Include="Assets\Project\Script\ListScene\List.cs" />
      <Compile Include="Assets\Project\Script\ListScene\ListSceneManager.cs" />
      <Compile Include="Assets\Project\Script\ListScene\ListViewer.cs" />
      <Compile Include="Assets\Project\Script\Model\Const.cs" />
+     <Compile Include="Assets\Project\Script\Model\Frame.cs" />
      <Compile Include="Assets\Project\Script\Model\HttpConector.cs" />
      <Compile Include="Assets\Project\Script\Model\HttpItem.cs" />
      <Compile Include="Assets\Project\Script\Model\User.cs" />

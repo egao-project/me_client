@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class User {
+public class Frame {
 	public string username;
-	public string password;
-	public string token;
+	public string title;
+	public string frame_type;
 }
+
