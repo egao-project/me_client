@@ -7,10 +7,10 @@ public class List : MonoBehaviour {
 
 	[SerializeField] Image _initialImage;
 	[SerializeField] Text _titleText;
-	[SerializeField] Text _timeText;
-	[SerializeField] Text _fileDitailText;
 	[SerializeField] RectTransform _listScale;
 	[SerializeField] Button _shareButton;
+	[SerializeField] Button _addImageButton;
+
 	private ListSceneManager _listSceneManager;
 
 	public Button shareButton{
@@ -21,10 +21,9 @@ public class List : MonoBehaviour {
 
 	void Awake(){
 		SizeController ();
-		_listSceneManager = GameObject.Find("Hand");
 	}
 
-	Image InitialImage {
+	public Image InitialImage {
 		get{
 			 return _initialImage;
 		}
@@ -33,7 +32,7 @@ public class List : MonoBehaviour {
 		}
 	}
 
-	Text TimeText{
+	public Text TitleText{
 		get{
 			return _titleText;
 		}
@@ -41,25 +40,9 @@ public class List : MonoBehaviour {
 			_titleText = value;
 		}
 	}
-	Text TitleText{
-		get{
-			return _timeText;
-		}
-		set{
-			_timeText = value;
-		}
-	}
-	Text FileDitailText
-	{
-		get{
-			return _fileDitailText;
-		}
-		set{
-			_fileDitailText = value;
-		}
-	}
 
 	//リスト表示時の幅を設定
+	//ToDo:幅の処理をInstantiateする側に移動
 	void SizeController(){
 		float width  = (float)Screen.width;
 		_listScale.sizeDelta = new Vector2 (width, 580f);
