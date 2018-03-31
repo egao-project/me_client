@@ -9,20 +9,20 @@ using UnityEngine.SceneManagement;
 public class InitController : BaseController {
 
 	//canvas管理
-	public GameObject loadingCanvas;
-	public GameObject singinCanvas;
-	public GameObject loginCanvas;
+	[SerializeField] private GameObject loadingCanvas;
+	[SerializeField] private GameObject singinCanvas;
+	[SerializeField] private GameObject loginCanvas;
 
 	//文字入力管理
-	public InputField useridInput;
-	public InputField passInput;
+	[SerializeField] private InputField useridInput;
+	[SerializeField] private InputField passInput;
 
 	//ボタン管理
-	public GameObject loginButton;
-	public GameObject messageButton;
+	[SerializeField] private GameObject loginButton;
+	[SerializeField] private GameObject messageButton;
 
 	//テキスト管理
-	public Text messageText;
+	[SerializeField] private Text messageText;
 
 	// Use this for initialization
 	public void Start () {

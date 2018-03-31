@@ -7,10 +7,23 @@ public class List : MonoBehaviour {
 
 	[SerializeField] Image _initialImage;
 	[SerializeField] Text _titleText;
-	[SerializeField] Text _timeText;
-	[SerializeField] Text _fileDitailText;
+	[SerializeField] RectTransform _listScale;
+	[SerializeField] Button _shareButton;
+	[SerializeField] Button _addImageButton;
 
-	Image InitialImage {
+	private ListSceneManager _listSceneManager;
+
+	public Button shareButton{
+		get{ return _shareButton;}
+	}
+
+	const float HEIGHT_SIZE = 580; 
+
+	void Awake(){
+		SizeController ();
+	}
+
+	public Image InitialImage {
 		get{
 			 return _initialImage;
 		}
@@ -19,7 +32,7 @@ public class List : MonoBehaviour {
 		}
 	}
 
-	Text TimeText{
+	public Text TitleText{
 		get{
 			return _titleText;
 		}
@@ -27,21 +40,11 @@ public class List : MonoBehaviour {
 			_titleText = value;
 		}
 	}
-	Text TitleText{
-		get{
-			return _timeText;
-		}
-		set{
-			_timeText = value;
-		}
-	}
-	Text FileDitailText
-	{
-		get{
-			return _fileDitailText;
-		}
-		set{
-			_fileDitailText = value;
-		}
+
+	//リスト表示時の幅を設定
+	//ToDo:幅の処理をInstantiateする側に移動
+	void SizeController(){
+		float width  = (float)Screen.width;
+		_listScale.sizeDelta = new Vector2 (width, 580f);
 	}
 }
