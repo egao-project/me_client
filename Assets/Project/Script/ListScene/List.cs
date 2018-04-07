@@ -44,7 +44,7 @@ public class List : MonoBehaviour {
 	//リスト表示時の幅を設定
 	//ToDo:幅の処理をInstantiateする側に移動
 	void SizeController(){
-		float width  = (float)Screen.width;
-		_listScale.sizeDelta = new Vector2 (width, 580f);
+		//float width  = (float)Screen.width;
+		//_listScale.sizeDelta = new Vector2 (width, 580f);
 	}
 }
