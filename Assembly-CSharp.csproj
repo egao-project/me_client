@@ -60,6 +60,8 @@
      <Compile Include="Assets\Project\Script\Model\Frame.cs" />
      <Compile Include="Assets\Project\Script\Model\HttpConector.cs" />
      <Compile Include="Assets\Project\Script\Model\HttpItem.cs" />
+     <Compile Include="Assets\Project\Script\Model\JsonHelper.cs" />
+     <Compile Include="Assets\Project\Script\Model\Picture.cs" />
      <Compile Include="Assets\Project\Script\Model\User.cs" />
      <Compile Include="Assets\SocialConnector\Sample\Sample.cs" />
      <Compile Include="Assets\SocialConnector\SocialConnector.cs" />

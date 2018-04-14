@@ -6,16 +6,6 @@ using Kakera;
 
 public class DetailController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 	[SerializeField]
 	private Unimgpicker imagePicker;
 
@@ -23,6 +13,25 @@ public class DetailController : MonoBehaviour {
 	private Image[] imageRenderer = new Image[5];
 
 	private int index;
+
+	// Use this for initialization
+	IEnumerator Start () {
+		Frame model = ListController.list [ListController.frame_idx];
+		int idx = 0;
+		foreach (string u in model.path_list.Split(',')) {
+			WWW www = new WWW(u);
+			// 画像ダウンロード完了を待機
+			yield return www;
+			var texture = www.texture;
+			imageRenderer[idx].sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+			idx++;
+		}
+	}
+
+	// Update is called once per frame
+	void Update () {
+
+	}
 
 	void Awake()
 	{
