@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Text;
 using System.Text.RegularExpressions;
-using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using System.IO;
 
 public class ListController : BaseController {
 
