@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Kakera;
 
-public class DetailController : MonoBehaviour {
+public class DetailController : BaseController {
 
 	[SerializeField]
 	private Unimgpicker imagePicker;
@@ -22,6 +22,8 @@ public class DetailController : MonoBehaviour {
 
 	// Use this for initialization
 	IEnumerator Start () {
+		base.Start ();
+
 		urls = frame.path_list.Split (',');
 		InitArrString(urls,frame.path_list);
 		InitArrInt(positions, frame.position_list);

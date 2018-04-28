@@ -63,6 +63,36 @@ public class HttpConector {
 
 	}
 
+	public HttpItem PostFrom(string url, string username, int position) {
+
+		WWWForm form = new WWWForm ();
+		form.AddField ("username", username);
+		form.AddField ("position", position);
+		UnityWebRequest request = UnityWebRequest.Post (url, form);
+		request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer ();
+		if (BaseController.user != null) {
+			request.SetRequestHeader ("Authorization", "JWT " + BaseController.user.token);
+		}
+
+		// リクエスト送信
+		request.Send();
+
+		int count = 0;
+		while (!request.isDone || count < MAX_WAIT) {
+			DelayMethod(0.5f);
+			count++;
+		}
+
+		if (request.isError)
+			Debug.Log (request.error);
+
+		HttpItem ret = new HttpItem ();
+		ret.code = request.responseCode;
+		ret.body = request.downloadHandler.text;
+
+		return ret;
+
+	}
 	public HttpItem PostImage(string path, string frame_id, int position) {
 
 		byte[] img = File.ReadAllBytes (path);
@@ -78,12 +108,7 @@ public class HttpConector {
 		if (BaseController.user != null) {
 			request.SetRequestHeader ("Authorization", "JWT " + BaseController.user.token);
 		}
-
-		// 下記でも可
-		// UnityWebRequest request = new UnityWebRequest("http://example.com");
-		// methodプロパティにメソッドを渡すことで任意のメソッドを利用できるようになった
-		// request.method = UnityWebRequest.kHttpVerbGET;
-
+			
 		// リクエスト送信
 		request.Send();
 
