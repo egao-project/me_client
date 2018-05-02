@@ -42,7 +42,7 @@ public class ListController : BaseController {
 			NonDataCanvas [idx].SetActive (false);
 			FilemesCanvas [idx].SetActive (true);
 
-			if (model.path_list == null) {
+			if (model.path_list == null || model.path_list == "") {
 				continue;
 			}
 
@@ -76,6 +76,7 @@ public class ListController : BaseController {
 				tmp = tmp + "}";
 			}
 			list [idx] = JsonUtility.FromJson<Frame> (tmp);
+			idx++;
 		}
 		for (int i = idx; i < MAX; i++) {
 			list [i] = new Frame ();
@@ -90,7 +91,7 @@ public class ListController : BaseController {
 		Frame selected = list [i];
 		if (selected.id == null) {
 			HttpConector http = new HttpConector ();
-			HttpItem r = http.PostFrom (Const.FRAME_ADD_URL, base.user.username, i);
+			HttpItem r = http.PostFrom (Const.FRAME_ADD_URL, BaseController.user.username, i);
 			if (r.code == 200) {
 				list[i] = JsonUtility.FromJson<Frame> (r.body);
 			}
