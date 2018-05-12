@@ -38,13 +38,14 @@ public class ListController : BaseController {
 		int idx = 0;
 		foreach (Frame model in list) {
 
-			//リスト切り替え
-			NonDataCanvas [idx].SetActive (false);
-			FilemesCanvas [idx].SetActive (true);
 
 			if (model.path_list == null || model.path_list == "") {
 				continue;
 			}
+
+			//リスト切り替え
+			NonDataCanvas [idx].SetActive (false);
+			FilemesCanvas [idx].SetActive (true);
 
 			//画像設定
 			string[] urls = model.path_list.Split (',');
@@ -56,6 +57,8 @@ public class ListController : BaseController {
 
 			//タイトル設定
 			TitleTexts[idx].text = model.title;
+
+			idx++;
 		}
 
 	}

@@ -41,13 +41,16 @@ public class DetailController : BaseController {
 			}
 
 			int idx = 0;
+			WWW www = null;
 			foreach (string u in urls) {
-				WWW www = new WWW (u);
+				string tmp = u.Trim ();
+				www = new WWW (tmp);
 				// 画像ダウンロード完了を待機
 				yield return www;
 				var texture = www.texture;
 				imageRenderer [positions [idx]].sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
 				idx++;
+				www = null;
 			}
 		}
 	}
@@ -97,7 +100,7 @@ public class DetailController : BaseController {
 		}
 		Debug.LogError ("6");
 
-		HttpItem r = http.PostImage (path, frame.id, index);
+		HttpItem r = http.PostImage (texture.EncodeToJPG(), frame.id, index);
 		Debug.LogError ("7");
 
 		Picture pp = JsonUtility.FromJson<Picture> (r.body);
