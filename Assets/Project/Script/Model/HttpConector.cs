@@ -93,9 +93,10 @@ public class HttpConector {
 		return ret;
 
 	}
-	public HttpItem PostImage(string path, string frame_id, int position) {
+//	public HttpItem PostImage(string path, string frame_id, int position) {
 
-		byte[] img = File.ReadAllBytes (path);
+//		byte[] img = File.ReadAllBytes (path);
+	public HttpItem PostImage(byte[] img, string frame_id, int position) {
 
 		WWWForm form = new WWWForm ();
 		form.AddField ("frame_id", frame_id);
