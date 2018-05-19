@@ -11,6 +11,8 @@ using System.IO;
 
 public class ListController : BaseController {
 
+	[SerializeField] private GameObject nextCanvas;
+
 	[SerializeField]
 	private Image[] imageRenderer = new Image[3];
 
@@ -30,6 +32,7 @@ public class ListController : BaseController {
 	// Use this for initialization
 	public IEnumerator Start () {
 		base.Start ();
+		nextCanvas.SetActive (true);
 
 		HttpConector http = new HttpConector ();
 		HttpItem r = http.Get (Const.FRAME_URL,"username="+BaseController.user.username);
@@ -49,6 +52,7 @@ public class ListController : BaseController {
 
 			//画像設定
 			string[] urls = model.path_list.Split (',');
+			//attacheWebImageToGameobject_appropriately (urls [0], imageRenderer [idx]);
 			WWW www = new WWW(urls[0]);
 			// 画像ダウンロード完了を待機
 			yield return www;
@@ -60,6 +64,7 @@ public class ListController : BaseController {
 
 			idx++;
 		}
+		nextCanvas.SetActive (false);
 
 	}
 
@@ -100,6 +105,41 @@ public class ListController : BaseController {
 			}
 		}
 		SceneManager.LoadScene ("DetailScene"); 
+	}
+
+	/// <summary>
+	/// //指定したウェブ画像を読み込んでゲームオブジェクトのテクスチャとして表示(適切に表示サイズを調整)
+	/// 読み込み画像が最大で表示されるように表示部分が自動調整されます
+	/// </summary>
+	/// <param name="url"></param>
+	/// <param name="gObj"></param>
+	/// <returns></returns>
+	public static IEnumerator<WWW> attacheWebImageToGameobject_appropriately(string url, Image gObj)
+	{
+		WWW texturewww = new WWW(url);
+		yield return texturewww;
+		gObj.GetComponent<Renderer>().material.mainTexture = texturewww.texture;
+
+		float Obj_x = gObj.transform.lossyScale.x;
+		float Obj_y = gObj.transform.lossyScale.y;
+		float Img_x = (float)texturewww.texture.width;
+		float Img_y = (float)texturewww.texture.height;
+
+		float aspectRatio_Obj = Obj_x / Obj_y;
+		float aspectRatio_Img = Img_x/Img_y;
+
+		if (aspectRatio_Img> aspectRatio_Obj)
+		{
+			//イメージサイズのほうが横に長い場合
+			gObj.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(aspectRatio_Obj / aspectRatio_Img, 1f));
+			gObj.GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(   (Img_x-(Obj_x*Img_y/Obj_y))/(2*Img_x)         , 1f));
+		}
+		else
+		{
+			//イメージサイズのほうが縦に長い場合
+			gObj.GetComponent<Renderer>().material.SetTextureScale("_MainTex", new Vector2(1f,  aspectRatio_Img/ aspectRatio_Obj));
+			gObj.GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(1f,  (Img_y-Obj_y*Img_x/Obj_x)/(2*Img_y)          ));
+		}
 	}
 
 

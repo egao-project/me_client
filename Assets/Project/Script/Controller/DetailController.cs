@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class DetailController : BaseController {
 
+	[SerializeField] private GameObject nextCanvas;
+
 	[SerializeField]
 	private Unimgpicker imagePicker;
 
@@ -25,6 +27,7 @@ public class DetailController : BaseController {
 	// Use this for initialization
 	IEnumerator Start () {
 		base.Start ();
+		nextCanvas.SetActive (true);
 
 		if (frame.path_list != null && frame.path_list != "") {
 			urls = frame.path_list.Split (',');
@@ -53,6 +56,8 @@ public class DetailController : BaseController {
 				www = null;
 			}
 		}
+		nextCanvas.SetActive (false);
+
 	}
 
 	// Update is called once per frame
@@ -76,6 +81,8 @@ public class DetailController : BaseController {
 
 	private IEnumerator LoadImage(string path, Image output)
 	{
+		nextCanvas.SetActive (true);
+
 		var url = "file://" + path;
 		var www = new WWW(url);
 		yield return www;
@@ -85,29 +92,24 @@ public class DetailController : BaseController {
 		{
 			Debug.LogError("Failed to load texture url:" + url);
 		}
-		Debug.LogError ("1");
 		output.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+		//output.SetNativeSize ();
 		//output.material.mainTexture = texture;
-		Debug.LogError ("2");
 
 		Picture p = master [index];
-		Debug.LogError ("3");
 		HttpConector http = new HttpConector ();
-		Debug.LogError ("4");
 		if (p != null) {
-			Debug.LogError ("5");
 			http.Delete (Const.PICTURE_DELETE_URL, p.id.ToString ());
 		}
-		Debug.LogError ("6");
 
 		HttpItem r = http.PostImage (texture.EncodeToJPG(), frame.id, index);
-		Debug.LogError ("7");
 
 		Picture pp = JsonUtility.FromJson<Picture> (r.body);
-		Debug.LogError ("8");
 
 		p.id = pp.id;
 		master [index] = p;
+
+		nextCanvas.SetActive (false);
 
 	}
 
