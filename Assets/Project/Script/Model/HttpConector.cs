@@ -22,8 +22,31 @@ public class HttpConector {
 	}
 	public HttpItem Delete(string url,string id)
 	{
-		url = url + id;
-		return Do(url, null, METHOD_DELETE);
+		WWWForm form = new WWWForm ();
+		form.AddField ("id", id);
+		UnityWebRequest request = UnityWebRequest.Post (url, form);
+		request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer ();
+		if (BaseController.user != null) {
+			request.SetRequestHeader ("Authorization", "JWT " + BaseController.user.token);
+		}
+
+		// リクエスト送信
+		request.Send();
+
+		int count = 0;
+		while (!request.isDone || count < MAX_WAIT) {
+			DelayMethod(0.5f);
+			count++;
+		}
+
+		if (request.isError)
+			Debug.Log (request.error);
+
+		HttpItem ret = new HttpItem ();
+		ret.code = request.responseCode;
+		ret.body = request.downloadHandler.text;
+
+		return ret;
 	}
 
 	public HttpItem Do(string url,string json,string method) {

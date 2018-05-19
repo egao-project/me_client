@@ -12,6 +12,7 @@ public class InitController : BaseController {
 	[SerializeField] private GameObject loadingCanvas;
 	[SerializeField] private GameObject singinCanvas;
 	[SerializeField] private GameObject loginCanvas;
+	[SerializeField] private GameObject nextCanvas;
 
 	//文字入力管理
 	[SerializeField] private InputField useridInput;
@@ -39,6 +40,8 @@ public class InitController : BaseController {
 	/// ログイン処理
 	/// </summary>
 	public void PushLoginButton(){
+		nextCanvas.SetActive (true);
+
 		User model = new User ();
 		model.username = useridInput.text;
 		model.password = passInput.text;
@@ -55,6 +58,7 @@ public class InitController : BaseController {
 			BaseController.SetUser(u);
 			SceneManager.LoadScene ("ListScene"); 
 		} else {
+			nextCanvas.SetActive (false);
 			ViewMessage("ログインに失敗しました。。");
 		}
 	}
