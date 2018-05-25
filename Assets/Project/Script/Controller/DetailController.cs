@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Kakera;
 using UnityEngine.SceneManagement;
-
+using System.Threading;
 
 public class DetailController : BaseController {
 
@@ -51,13 +51,46 @@ public class DetailController : BaseController {
 				// 画像ダウンロード完了を待機
 				yield return www;
 				var texture = www.texture;
-				imageRenderer [positions [idx]].sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
+				float x = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.x;
+				float y = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.y;
+
+				float bX, bY;
+
+				if (x > y) {
+					float gen = texture.width / x;
+					bX = x;
+					bY = y * gen;
+				} else {
+					float gen = texture.height / y;
+					bX = x * gen;
+					bY = y;
+				}
+
+				TextureScale.Bilinear(texture,(int)bX, (int)bY);
+				var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
+
+				imageRenderer [positions [idx]].sprite = 
+					Sprite.Create (tmpTexture, new Rect (0, 0, x, y), Vector2.zero);
 				idx++;
 				www = null;
 			}
 		}
 		nextCanvas.SetActive (false);
 
+	}
+	Texture2D getCenterClippedTexture(Texture2D texture,int x,int y)
+	{
+		Color[] pixel;
+		Texture2D clipTex;
+		int tw = texture.width;
+		int th = texture.height;
+		// GetPixels (x, y, width, height) で切り出せる
+		pixel = texture.GetPixels(0, 0, x, y);
+		// 横幅，縦幅を指定してTexture2Dを生成
+		clipTex = new Texture2D(x, y); 
+		clipTex.SetPixels(pixel);
+		clipTex.Apply();
+		return clipTex;
 	}
 
 	// Update is called once per frame
@@ -92,7 +125,27 @@ public class DetailController : BaseController {
 		{
 			Debug.LogError("Failed to load texture url:" + url);
 		}
-		output.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+		//output.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+		float x = imageRenderer [positions [index]].transform.GetComponent<RectTransform> ().sizeDelta.x;
+		float y = imageRenderer [positions [index]].transform.GetComponent<RectTransform> ().sizeDelta.y;
+
+		float bX, bY;
+
+		if (x > y) {
+			float gen = texture.width / x;
+			bX = x;
+			bY = y * gen;
+		} else {
+			float gen = texture.height / y;
+			bX = x * gen;
+			bY = y;
+		}
+
+		TextureScale.Bilinear(texture,(int)bX, (int)bY);
+		var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
+
+		output.sprite = 
+			Sprite.Create (tmpTexture, new Rect (0, 0, x, y), Vector2.zero);
 		//output.SetNativeSize ();
 		//output.material.mainTexture = texture;
 
@@ -100,6 +153,8 @@ public class DetailController : BaseController {
 		HttpConector http = new HttpConector ();
 		if (p != null) {
 			http.Delete (Const.PICTURE_DELETE_URL, p.id.ToString ());
+		} else {
+			p = new Picture();
 		}
 
 		HttpItem r = http.PostImage (texture.EncodeToJPG(), frame.id, index);

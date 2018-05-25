@@ -8,4 +8,5 @@ public class Const {
 	public const string FRAME_ADD_URL="https://egao-me-server.herokuapp.com/api/frames/add/";
 	public const string IMAGE_POST_URL="https://egao-me-server.herokuapp.com/api/pictures/upload/";
 	public const string PICTURE_DELETE_URL="https://egao-me-server.herokuapp.com/api/pictures/delete/";
+	public const string VIEW_URL="https://egao-me-server.herokuapp.com/me_view/";
 }
