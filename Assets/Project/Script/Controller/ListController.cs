@@ -57,23 +57,6 @@ public class ListController : BaseController {
 			// 画像ダウンロード完了を待機
 			yield return www;
 			var texture = www.texture;
-//			float x = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.x;
-//			float y = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.y;
-//
-//			float bX, bY;
-//
-//			if (x > y) {
-//				float gen = texture.width / x;
-//				bX = x;
-//				bY = y * gen;
-//			} else {
-//				float gen = texture.height / y;
-//				bX = x * gen;
-//				bY = y;
-//			}
-//
-//			TextureScale.Bilinear(texture,(int)bX, (int)bY);
-//			var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
 			imageRenderer[idx].sprite = 
 				Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
 
@@ -84,20 +67,6 @@ public class ListController : BaseController {
 		}
 		nextCanvas.SetActive (false);
 
-	}
-	Texture2D getCenterClippedTexture(Texture2D texture,int x,int y)
-	{
-		Color[] pixel;
-		Texture2D clipTex;
-		int tw = texture.width;
-		int th = texture.height;
-		// GetPixels (x, y, width, height) で切り出せる
-		pixel = texture.GetPixels(0, 0, x, y);
-		// 横幅，縦幅を指定してTexture2Dを生成
-		clipTex = new Texture2D(x, y); 
-		clipTex.SetPixels(pixel);
-		clipTex.Apply();
-		return clipTex;
 	}
 
 	private void JsonToFramList (string json) 
