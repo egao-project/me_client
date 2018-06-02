@@ -57,25 +57,25 @@ public class ListController : BaseController {
 			// 画像ダウンロード完了を待機
 			yield return www;
 			var texture = www.texture;
-			float x = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.x;
-			float y = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.y;
-
-			float bX, bY;
-
-			if (x > y) {
-				float gen = texture.width / x;
-				bX = x;
-				bY = y * gen;
-			} else {
-				float gen = texture.height / y;
-				bX = x * gen;
-				bY = y;
-			}
-
-			TextureScale.Bilinear(texture,(int)bX, (int)bY);
-			var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
+//			float x = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.x;
+//			float y = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.y;
+//
+//			float bX, bY;
+//
+//			if (x > y) {
+//				float gen = texture.width / x;
+//				bX = x;
+//				bY = y * gen;
+//			} else {
+//				float gen = texture.height / y;
+//				bX = x * gen;
+//				bY = y;
+//			}
+//
+//			TextureScale.Bilinear(texture,(int)bX, (int)bY);
+//			var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
 			imageRenderer[idx].sprite = 
-				Sprite.Create (tmpTexture, new Rect (0, 0, x, y), Vector2.zero);
+				Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
 
 			//タイトル設定
 			TitleTexts[idx].text = model.title;

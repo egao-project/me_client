@@ -51,26 +51,26 @@ public class DetailController : BaseController {
 				// 画像ダウンロード完了を待機
 				yield return www;
 				var texture = www.texture;
-				float x = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.x;
-				float y = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.y;
-
-				float bX, bY;
-
-				if (x > y) {
-					float gen = texture.width / x;
-					bX = x;
-					bY = y * gen;
-				} else {
-					float gen = texture.height / y;
-					bX = x * gen;
-					bY = y;
-				}
-
-				TextureScale.Bilinear(texture,(int)bX, (int)bY);
-				var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
+//				float x = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.x;
+//				float y = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.y;
+//
+//				float bX, bY;
+//
+//				if (x > y) {
+//					float gen = texture.width / x;
+//					bX = x;
+//					bY = y * gen;
+//				} else {
+//					float gen = texture.height / y;
+//					bX = x * gen;
+//					bY = y;
+//				}
+//
+//				TextureScale.Bilinear(texture,(int)bX, (int)bY);
+//				var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
 
 				imageRenderer [positions [idx]].sprite = 
-					Sprite.Create (tmpTexture, new Rect (0, 0, x, y), Vector2.zero);
+					Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
 				idx++;
 				www = null;
 			}
@@ -140,6 +140,21 @@ public class DetailController : BaseController {
 			bX = x * gen;
 			bY = y;
 		}
+
+		float bix = 0.1f;
+		while (true) {
+			if (texture.width * bix < 900) {
+				bix = bix + 0.1f;
+			} else {
+				break;
+			}
+		}
+
+		bX = texture.width * bix;
+		bY = texture.height * bix;
+		Debug.LogError(bX);
+		Debug.LogError(bY);
+
 
 		TextureScale.Bilinear(texture,(int)bX, (int)bY);
 		var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
