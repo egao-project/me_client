@@ -16,6 +16,9 @@ public class DetailController : BaseController {
 	[SerializeField]
 	private Image[] imageRenderer = new Image[5];
 
+	[SerializeField]
+	private Image[] imageSampleRenderer = new Image[5];
+
 	private int index;
 
 	private string[] urls = new string[5];
@@ -51,9 +54,26 @@ public class DetailController : BaseController {
 				// 画像ダウンロード完了を待機
 				yield return www;
 				var texture = www.texture;
+				float x = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.x;
+				float y = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.y;
 
+				float bX, bY;
+
+				bX = x;
+				if (texture.width < x) {
+					bX = texture.width;
+				}
+				bY = y;
+				if (texture.height < y) {
+					bY = texture.height;
+				}
+
+				var tmpTexture = getCenterClippedTexture (texture, (int)bX, (int)bY);
 				imageRenderer [positions [idx]].sprite = 
+					Sprite.Create (tmpTexture, new Rect (0, 0, bX, bY), Vector2.zero);
+				imageSampleRenderer [positions [idx]].sprite = 
 					Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
+				
 				idx++;
 				www = null;
 			}
@@ -108,6 +128,7 @@ public class DetailController : BaseController {
 		{
 			Debug.LogError("Failed to load texture url:" + url);
 		}
+
 		//output.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
 		float x = imageRenderer [positions [index]].transform.GetComponent<RectTransform> ().sizeDelta.x;
 		float y = imageRenderer [positions [index]].transform.GetComponent<RectTransform> ().sizeDelta.y;
@@ -144,6 +165,8 @@ public class DetailController : BaseController {
 
 		output.sprite = 
 			Sprite.Create (tmpTexture, new Rect (0, 0, x, y), Vector2.zero);
+		imageSampleRenderer [positions [index]].sprite = 
+			Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
 		//output.SetNativeSize ();
 		//output.material.mainTexture = texture;
 
