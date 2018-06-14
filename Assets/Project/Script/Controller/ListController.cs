@@ -16,6 +16,9 @@ public class ListController : BaseController {
 	[SerializeField]
 	private Image[] imageRenderer = new Image[3];
 
+	[SerializeField]
+	private Image[] imageSampleRenderer = new Image[3];
+
 	[SerializeField] 
 	private GameObject[] NonDataCanvas = new GameObject[3];
 
@@ -57,7 +60,24 @@ public class ListController : BaseController {
 			// 画像ダウンロード完了を待機
 			yield return www;
 			var texture = www.texture;
+			float x = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.x;
+			float y = imageRenderer [idx].transform.GetComponent<RectTransform> ().sizeDelta.y;
+
+			float bX, bY;
+
+			bX = x;
+			if (texture.width < x) {
+				bX = texture.width;
+			}
+			bY = y;
+			if (texture.height < y) {
+				bY = texture.height;
+			}
+
+			var tmpTexture = getCenterClippedTexture (texture, (int)bX, (int)bY);
 			imageRenderer[idx].sprite = 
+				Sprite.Create (tmpTexture, new Rect (0, 0, bX, bY), Vector2.zero);
+			imageSampleRenderer[idx].sprite = 
 				Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
 
 			//タイトル設定
@@ -68,7 +88,21 @@ public class ListController : BaseController {
 		nextCanvas.SetActive (false);
 
 	}
-
+	Texture2D getCenterClippedTexture(Texture2D texture,int x,int y)
+	{
+		Color[] pixel;
+		Texture2D clipTex;
+		int tw = texture.width;
+		int th = texture.height;
+		// GetPixels (x, y, width, height) で切り出せる
+		pixel = texture.GetPixels(0, 0, x, y);
+		// 横幅，縦幅を指定してTexture2Dを生成
+		clipTex = new Texture2D(x, y); 
+		clipTex.SetPixels(pixel);
+		clipTex.Apply();
+		return clipTex;
+	}
+		
 	private void JsonToFramList (string json) 
 	{
 		string[] separator = new string[] {"},"};
@@ -85,7 +119,9 @@ public class ListController : BaseController {
 				tmp = tmp + "}";
 			}
 			list [idx] = JsonUtility.FromJson<Frame> (tmp);
-			idx++;
+			if (list.Length > idx) {
+				idx++;
+			}
 		}
 		for (int i = idx; i < MAX; i++) {
 			list [i] = new Frame ();
