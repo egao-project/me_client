@@ -165,7 +165,7 @@ public class DetailController : BaseController {
 
 		output.sprite = 
 			Sprite.Create (tmpTexture, new Rect (0, 0, x, y), Vector2.zero);
-		imageSampleRenderer [positions [index]].sprite = 
+		imageSampleRenderer [index].sprite = 
 			Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
 		//output.SetNativeSize ();
 		//output.material.mainTexture = texture;
