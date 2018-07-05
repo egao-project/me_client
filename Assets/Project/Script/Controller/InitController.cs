@@ -13,14 +13,21 @@ public class InitController : BaseController {
 	[SerializeField] private GameObject singinCanvas;
 	[SerializeField] private GameObject loginCanvas;
 	[SerializeField] private GameObject nextCanvas;
+	[SerializeField] private GameObject signupCanvas;
 
 	//文字入力管理
 	[SerializeField] private InputField useridInput;
 	[SerializeField] private InputField passInput;
 
+	//文字入力管理(新規登録)
+	[SerializeField] private InputField registUseridInput;
+	[SerializeField] private InputField registPassInput;
+	[SerializeField] private InputField registEmailInput;
+
 	//ボタン管理
 	[SerializeField] private GameObject loginButton;
 	[SerializeField] private GameObject messageButton;
+	[SerializeField] private GameObject messageButtonSignup;
 
 	//テキスト管理
 	[SerializeField] private Text messageText;
@@ -31,7 +38,7 @@ public class InitController : BaseController {
 
 		//初期起動状態かローカルに保存しているTokenStringを確認
 		if (PlayerPrefs.GetString ("TokenKey") == null) {
-			//signup処理:TODO
+			SignUp ();
 		} else {
 			//トークンキーが期限切れ及び一致しない場合の処理
 
@@ -78,6 +85,32 @@ public class InitController : BaseController {
 			ViewMessage("ログインに失敗しました。。");
 		}
 	}
+
+	/// <summary>
+	/// 新規登録処理
+	/// </summary>
+	public void SignUpButton(){
+		nextCanvas.SetActive (true);
+
+		RegistUser model = new RegistUser ();
+		model.username = registUseridInput.text;
+		model.password = registPassInput.text;
+		model.email = registEmailInput.text;
+
+		HttpConector http = new HttpConector ();
+		HttpItem r = http.Post (Const.REGISTER,JsonUtility.ToJson (model));
+		Debug.Log (r.code);
+		Debug.Log (r.body);
+
+		if (r.code == 201) {
+			//サインイン画面に移動
+			ViewSingin ();
+
+		} else {
+			nextCanvas.SetActive (false);
+			ViewMessageSignUp("新規登録に失敗しました。");
+		}
+	}
 		
 	/// <summary>
 	/// メッセージ消す 
@@ -87,6 +120,23 @@ public class InitController : BaseController {
 		messageButton.SetActive (false);
 	}
 
+	/// <summary>
+	/// メッセージ消す 
+	/// </summary>
+	public void PushMessageButtonSignUp ()
+	{
+		messageButtonSignup.SetActive (false);
+	}
+
+	/// <summary>
+	/// サインアップ画面で戻るボタン処理
+	/// </summary>
+	/// <param name="msg">Message.</param>
+	public void RegisterBackButton ()
+	{
+		ViewSingin ();
+	}
+
 
 /**private**/
 	private void ViewMessage (string msg)
@@ -94,26 +144,36 @@ public class InitController : BaseController {
 		messageButton.SetActive (true);
 		messageText.text = msg;
 	}
+
+	private void ViewMessageSignUp (string msg)
+	{
+		messageButtonSignup.SetActive (true);
+		messageText.text = msg;
+	}
 		
 	private void ViewLoading () {
 		loadingCanvas.SetActive (true);
 		singinCanvas.SetActive (false);
 		loginCanvas.SetActive (false);
+		signupCanvas.SetActive (false);
 	}
 	private void ViewSingin () {
 		loadingCanvas.SetActive (false);
 		singinCanvas.SetActive (true);
 		loginCanvas.SetActive (false);
+		signupCanvas.SetActive (false);
 	}
 	private void ViewLogin () {
 		loadingCanvas.SetActive (false);
 		singinCanvas.SetActive (false);
 		loginCanvas.SetActive (true);
+		signupCanvas.SetActive (false);
 	}
-	private void signup () {
+	private void SignUp () {
 		loadingCanvas.SetActive (false);
 		singinCanvas.SetActive (false);
 		loginCanvas.SetActive (false);
+		signupCanvas.SetActive (true);
 	}
 
 }
