@@ -14,6 +14,7 @@ public class InitController : BaseController {
 	[SerializeField] private GameObject loginCanvas;
 	[SerializeField] private GameObject nextCanvas;
 	[SerializeField] private GameObject signupCanvas;
+	[SerializeField] private GameObject mailSignupCanvas;
 
 	//文字入力管理
 	[SerializeField] private InputField useridInput;
@@ -32,19 +33,27 @@ public class InitController : BaseController {
 	//テキスト管理
 	[SerializeField] private Text messageText;
 
+	private string tokenKey;
+
 	// Use this for initialization
 	public void Start () {
 		ViewLoading ();
+		tokenKey = PlayerPrefs.GetString ("TokenKey");
 
 		//初期起動状態かローカルに保存しているTokenStringを確認
-		if (PlayerPrefs.GetString ("TokenKey") == null) {
-			SignUp ();
-		} else {
-			//トークンキーが期限切れ及び一致しない場合の処理
-
+		if (tokenKey == null || tokenKey == "") 
+		{
+			Invoke ("SignUp", 1.0f);
 		}
-
-		Invoke("ViewLogin", 1.0f);
+		else if (AuthToken () == true) 
+		{
+			//トークンキーが期限切れ及び一致しない場合の処理
+			SceneManager.LoadScene ("ListScene");
+		}
+		else 
+		{
+			Invoke ("ViewLogin", 1.0f);
+		}
 	}
 	
 	// Update is called once per frame
@@ -61,10 +70,12 @@ public class InitController : BaseController {
 		model.username = useridInput.text;
 		model.password = passInput.text;
 
+
 		HttpConector http = new HttpConector ();
 		HttpItem r = http.Post (Const.LOGIN_URL,JsonUtility.ToJson (model));
 		Debug.Log (r.code);
 		Debug.Log (r.body);
+		Debug.Log ("ConstURL is:" + Const.LOGIN_URL);
 
 		if (r.code == 200) {
 			User u = JsonUtility.FromJson<User> (r.body);
@@ -103,8 +114,12 @@ public class InitController : BaseController {
 		Debug.Log (r.body);
 
 		if (r.code == 201) {
+			
+			//次回アプリ起動時ログイン画面に遷移するための仮トークンキー
+			PlayerPrefs.SetString("TokenKey", "NoFirstLogin");
+
 			//サインイン画面に移動
-			ViewSingin ();
+			Invoke ("ViewLogin", 1.0f);
 
 		} else {
 			nextCanvas.SetActive (false);
@@ -139,6 +154,22 @@ public class InitController : BaseController {
 
 
 /**private**/
+	private bool AuthToken()
+	{
+		if (tokenKey == "NoFirstLogin")
+		{
+			return false;
+			//tokenキーの整合性の確認
+		} 
+		else 
+		{
+
+
+		}
+		return false;
+	}
+
+
 	private void ViewMessage (string msg)
 	{
 		messageButton.SetActive (true);
@@ -168,12 +199,16 @@ public class InitController : BaseController {
 		singinCanvas.SetActive (false);
 		loginCanvas.SetActive (true);
 		signupCanvas.SetActive (false);
+		mailSignupCanvas.SetActive (false);
 	}
 	private void SignUp () {
 		loadingCanvas.SetActive (false);
 		singinCanvas.SetActive (false);
 		loginCanvas.SetActive (false);
-		signupCanvas.SetActive (true);
+		//signupCanvas.SetActive (true);
+		//現状メールサインアップのみの実装
+		signupCanvas.SetActive (false);
+		mailSignupCanvas.SetActive (true);
 	}
 
 }
