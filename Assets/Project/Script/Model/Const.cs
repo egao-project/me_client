@@ -10,4 +10,5 @@ public class Const {
 	public const string IMAGE_POST_URL="https://www.egao-me.com/api/pictures/upload/";
 	public const string PICTURE_DELETE_URL="https://www.egao-me.com/api/pictures/delete/";
 	public const string VIEW_URL="https://www.egao-me.com/me_view/";
+	public const string REGISTER="https://www.egao-me.com/auth/register/";
 }
