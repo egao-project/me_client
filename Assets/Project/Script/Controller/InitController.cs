@@ -190,8 +190,8 @@ public class InitController : BaseController {
 	}
 	private void ViewSingin () {
 		loadingCanvas.SetActive (false);
-		singinCanvas.SetActive (true);
-		loginCanvas.SetActive (false);
+		singinCanvas.SetActive (false);
+		loginCanvas.SetActive (true);
 		signupCanvas.SetActive (false);
 	}
 	private void ViewLogin () {
