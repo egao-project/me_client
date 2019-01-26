@@ -27,17 +27,17 @@ public class InitController : BaseController {
 
 	//ボタン管理
 	[SerializeField] private GameObject loginButton;
-	[SerializeField] private GameObject messageButton;
-	[SerializeField] private GameObject messageButtonSignup;
 
 	//テキスト管理
-	[SerializeField] private Text messageText;
+	//[SerializeField] private Text messageText;
+    private DialogController dialogView;
 
 	private string tokenKey;
 
 	// Use this for initialization
 	public void Start () {
-		ViewLoading ();
+        dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
+        ViewLoading();
 		tokenKey = PlayerPrefs.GetString ("TokenKey");
 
 		//初期起動状態かローカルに保存しているTokenStringを確認
@@ -126,22 +126,6 @@ public class InitController : BaseController {
 			ViewMessageSignUp("新規登録に失敗しました。");
 		}
 	}
-		
-	/// <summary>
-	/// メッセージ消す 
-	/// </summary>
-	public void PushMessageButton ()
-	{
-		messageButton.SetActive (false);
-	}
-
-	/// <summary>
-	/// メッセージ消す 
-	/// </summary>
-	public void PushMessageButtonSignUp ()
-	{
-		messageButtonSignup.SetActive (false);
-	}
 
 	/// <summary>
 	/// サインアップ画面で戻るボタン処理
@@ -172,15 +156,13 @@ public class InitController : BaseController {
 
 	private void ViewMessage (string msg)
 	{
-		messageButton.SetActive (true);
-		messageText.text = msg;
+        dialogView.MessageView(msg);
 	}
 
 	private void ViewMessageSignUp (string msg)
 	{
-		messageButtonSignup.SetActive (true);
-		messageText.text = msg;
-	}
+        dialogView.MessageView(msg);
+    }
 		
 	private void ViewLoading () {
 		loadingCanvas.SetActive (true);
