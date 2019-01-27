@@ -36,6 +36,7 @@ public class ListController : BaseController {
 	public static int frame_idx = 0;
 
 	// Use this for initialization
+    //TODO:変更が必要
 	public IEnumerator Start () {
 		base.Start ();
 		nextCanvas.SetActive (true);
@@ -143,8 +144,8 @@ public class ListController : BaseController {
 		if(selected != null) {
 			url = url + "?frame_id=" + selected.id.ToString ();
 		}
-		UniClipboard.SetText(url);
-        dialogView.MessageView("URLのコピーが完了しました。");
+		//UniClipboard.SetText(url);
+        SocialConnector.SocialConnector.Share("写真共有アプリケーション Me", url);
 
     }
 
