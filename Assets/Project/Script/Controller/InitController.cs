@@ -28,8 +28,7 @@ public class InitController : BaseController {
 	//ボタン管理
 	[SerializeField] private GameObject loginButton;
 
-	//テキスト管理
-	//[SerializeField] private Text messageText;
+	//ダイアログ表示クラス
     private DialogController dialogView;
 
 	private string tokenKey;

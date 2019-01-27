@@ -28,7 +28,10 @@ public class ListController : BaseController {
 	[SerializeField] 
 	private Text[] TitleTexts = new Text[3];
 
-	public const int MAX = 3;
+    //テキスト管理
+    private DialogController dialogView;
+
+    public const int MAX = 3;
 	public static Frame[] list = new Frame[MAX];
 	public static int frame_idx = 0;
 
@@ -37,7 +40,11 @@ public class ListController : BaseController {
 		base.Start ();
 		nextCanvas.SetActive (true);
 
-		HttpConector http = new HttpConector ();
+        //シングルトンで表示されているDialogViewerを取得
+        //TODO:Findで見つからなかった場合のInstantiate処理を行う
+        dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
+
+        HttpConector http = new HttpConector ();
 		HttpItem r = http.Get (Const.FRAME_URL,"username="+BaseController.user.username);
 		JsonToFramList(r.body);
 

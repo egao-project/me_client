@@ -133,7 +133,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 10610114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 561.7637, y: 440.96802, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -162,7 +162,6 @@ MonoBehaviour:
   registPassInput: {fileID: 966173929}
   registEmailInput: {fileID: 2063640943}
   loginButton: {fileID: 749329532}
-  messageText: {fileID: 454710214}
 --- !u!1 &50947456
 GameObject:
   m_ObjectHideFlags: 0
@@ -2623,7 +2622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &927009436
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6258,8 +6257,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 10610116}
-        m_MethodName: PushMessageButton
+      - m_Target: {fileID: 1089534211}
+        m_MethodName: MessageClose
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

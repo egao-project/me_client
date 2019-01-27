@@ -24,7 +24,10 @@ public class DetailController : BaseController {
 
 	private int index;
 
-	private string[] urls = new string[5];
+    //ダイアログ表示クラス
+    private DialogController dialogView;
+
+    private string[] urls = new string[5];
 	private int[] positions = new int[5];
 	private int[] ids = new int[5];
 	private Picture[] master = new Picture[5];
@@ -35,7 +38,11 @@ public class DetailController : BaseController {
 		base.Start ();
 		nextCanvas.SetActive (true);
 
-		if (frame.path_list != null && frame.path_list != "") {
+        //シングルトンで表示されているDialogViewerを取得
+        //TODO:Findで見つからなかった場合のInstantiate処理を行う
+        dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
+
+        if (frame.path_list != null && frame.path_list != "") {
 			urls = frame.path_list.Split (',');
 			InitArrString (urls, frame.path_list);
 			InitArrInt (positions, frame.position_list);
