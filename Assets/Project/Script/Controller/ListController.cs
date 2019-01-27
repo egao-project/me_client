@@ -144,7 +144,9 @@ public class ListController : BaseController {
 			url = url + "?frame_id=" + selected.id.ToString ();
 		}
 		UniClipboard.SetText(url);
-	}
+        dialogView.MessageView("URLのコピーが完了しました。");
+
+    }
 
 	public void OnPressFilesButton(int i)
 	{
