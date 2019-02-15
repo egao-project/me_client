@@ -49,10 +49,6 @@ public class InitController : BaseController {
 			//トークンキーが期限切れ及び一致しない場合の処理
 			SceneManager.LoadScene ("ListScene");
 		}
-		else 
-		{
-			Invoke ("ViewLogin", 1.0f);
-		}
 	}
 	
 	// Update is called once per frame
@@ -175,7 +171,7 @@ public class InitController : BaseController {
 		loginCanvas.SetActive (true);
 		signupCanvas.SetActive (false);
 	}
-	private void ViewLogin () {
+	public void ViewLogin () {
 		loadingCanvas.SetActive (false);
 		singinCanvas.SetActive (false);
 		loginCanvas.SetActive (true);
