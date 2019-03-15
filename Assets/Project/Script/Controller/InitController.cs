@@ -79,11 +79,14 @@ public class InitController : BaseController {
 			u.password = passInput.text;
 			BaseController.SetUser(u);
 
-			//Tokenキーを保存
+			//PlayerPrefsに保存
+            //TODO:ハッシュ化が必要
 			PlayerPrefs.SetString("TokenKey", u.token);
+            PlayerPrefs.SetString("UserID", u.username);
+            PlayerPrefs.SetString("UserPass", u.password);
 
 
-			Debug.Log (PlayerPrefs.GetString ("TokenKey"));
+            Debug.Log (PlayerPrefs.GetString ("TokenKey"));
 
 			SceneManager.LoadScene ("ListScene"); 
 		} else {
@@ -131,9 +134,47 @@ public class InitController : BaseController {
 		ViewSingin ();
 	}
 
+    /// <summary>
+    /// 自動ログイン処理
+    /// </summary>
+    public void AutoLogin()
+    {
+        nextCanvas.SetActive(true);
 
-/**private**/
-	private bool AuthToken()
+        User model = new User();
+        //model.token = tokenKey;
+        model.username = PlayerPrefs.GetString("UserID");
+        model.password = PlayerPrefs.GetString("UserPass");
+
+
+        HttpConector http = new HttpConector();
+        HttpItem r = http.Post(Const.LOGIN_URL, JsonUtility.ToJson(model));
+        Debug.Log(r.code);
+        Debug.Log(r.body);
+        Debug.Log("ConstURL is:" + Const.LOGIN_URL);
+
+        if (r.code == 200)
+        {
+            User u = JsonUtility.FromJson<User>(r.body);
+            //ユーザ情報を保持
+            u.username = useridInput.text;
+            u.password = passInput.text;
+            BaseController.SetUser(u);
+
+            Debug.Log(PlayerPrefs.GetString("TokenKey"));
+
+            SceneManager.LoadScene("ListScene");
+        }
+        else
+        {
+            nextCanvas.SetActive(false);
+            ViewLogin();
+        }
+    }
+
+
+    /**private**/
+    private bool AuthToken()
 	{
 		if (tokenKey == "NoFirstLogin")
 		{
@@ -143,13 +184,14 @@ public class InitController : BaseController {
 		else 
 		{
 
-
 		}
 		return false;
 	}
 
 
-	private void ViewMessage (string msg)
+
+
+    private void ViewMessage (string msg)
 	{
         dialogView.MessageView(msg);
 	}
@@ -171,7 +213,7 @@ public class InitController : BaseController {
 		loginCanvas.SetActive (true);
 		signupCanvas.SetActive (false);
 	}
-	public void ViewLogin () {
+	private void ViewLogin () {
 		loadingCanvas.SetActive (false);
 		singinCanvas.SetActive (false);
 		loginCanvas.SetActive (true);

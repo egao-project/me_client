@@ -7,7 +7,7 @@ public class SceneLoadAnimationSwitcher : MonoBehaviour {
 
     public void Shift()
     {
-        LoadingObj.ViewLogin();
+        LoadingObj.AutoLogin();
     }
 
 }

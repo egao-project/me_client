@@ -145,7 +145,7 @@ public class ListController : BaseController {
 			url = url + "?frame_id=" + selected.id.ToString ();
 		}
 		//UniClipboard.SetText(url);
-        SocialConnector.SocialConnector.Share("写真共有アプリケーション Me", url);
+        SocialConnector.SocialConnector.Share("This is Me! ", url);
 
     }
 
