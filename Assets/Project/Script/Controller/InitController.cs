@@ -34,7 +34,8 @@ public class InitController : BaseController {
 	private string tokenKey;
 
 	// Use this for initialization
-	public void Start () {
+	public void Start () 
+    {
         dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
         ViewLoading();
 		tokenKey = PlayerPrefs.GetString ("TokenKey");
@@ -50,10 +51,6 @@ public class InitController : BaseController {
 			SceneManager.LoadScene ("ListScene");
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
 
 	/// <summary>
 	/// ログイン処理
@@ -65,34 +62,11 @@ public class InitController : BaseController {
 		model.username = useridInput.text;
 		model.password = passInput.text;
 
-
-		HttpConector http = new HttpConector ();
-		HttpItem r = http.Post (Const.LOGIN_URL,JsonUtility.ToJson (model));
-		Debug.Log (r.code);
-		Debug.Log (r.body);
-		Debug.Log ("ConstURL is:" + Const.LOGIN_URL);
-
-		if (r.code == 200) {
-			User u = JsonUtility.FromJson<User> (r.body);
-			//ユーザ情報を保持
-			u.username = useridInput.text;
-			u.password = passInput.text;
-			BaseController.SetUser(u);
-
-			//PlayerPrefsに保存
-            //TODO:ハッシュ化が必要
-			PlayerPrefs.SetString("TokenKey", u.token);
-            PlayerPrefs.SetString("UserID", u.username);
-            PlayerPrefs.SetString("UserPass", u.password);
-
-
-            Debug.Log (PlayerPrefs.GetString ("TokenKey"));
-
-			SceneManager.LoadScene ("ListScene"); 
-		} else {
-			nextCanvas.SetActive (false);
-			ViewMessage("ログインに失敗しました。。");
-		}
+        APIController.Login(model,
+            () => { SceneManager.LoadScene("ListScene"); }, //成功時一覧画面に遷移
+            () => { nextCanvas.SetActive(false);            //失敗時ポップアップを表示
+                ViewMessage("ログインに失敗しました。。");
+            });
 	}
 
 	/// <summary>
@@ -101,28 +75,24 @@ public class InitController : BaseController {
 	public void SignUpButton(){
 		nextCanvas.SetActive (true);
 
-		RegistUser model = new RegistUser ();
-		model.username = registUseridInput.text;
-		model.password = registPassInput.text;
-		model.email = registEmailInput.text;
+        //入力されたデータをjsonに整形
+        RegistUser model = new RegistUser();
+        model.username = registUseridInput.text;
+        model.password = registPassInput.text;
+        model.email = registEmailInput.text;
 
-		HttpConector http = new HttpConector ();
-		HttpItem r = http.Post (Const.REGISTER,JsonUtility.ToJson (model));
-		Debug.Log (r.code);
-		Debug.Log (r.body);
-
-		if (r.code == 201) {
-			
-			//次回アプリ起動時ログイン画面に遷移するための仮トークンキー
-			PlayerPrefs.SetString("TokenKey", "NoFirstLogin");
-
-			//サインイン画面に移動
-			Invoke ("ViewLogin", 1.0f);
-
-		} else {
-			nextCanvas.SetActive (false);
-			ViewMessageSignUp("新規登録に失敗しました。");
-		}
+        //API処理
+        APIController.APIPost(Const.FRAME_ADD_TITLE, JsonUtility.ToJson(model), 
+            value => {          
+                //次回アプリ起動時ログイン画面に遷移するための仮トークンキー
+                PlayerPrefs.SetString("TokenKey", "NoFirstLogin");
+                //サインイン画面に移動
+                Invoke("ViewLogin", 1.0f);
+            },
+            () => {
+                nextCanvas.SetActive(false);
+                ViewMessageSignUp("新規登録に失敗しました。");
+            });
 	}
 
 	/// <summary>
@@ -139,37 +109,20 @@ public class InitController : BaseController {
     /// </summary>
     public void AutoLogin()
     {
-        nextCanvas.SetActive(true);
-
+        //端末内に保持しているログイン情報を取得
         User model = new User();
         //model.token = tokenKey;
         model.username = PlayerPrefs.GetString("UserID");
         model.password = PlayerPrefs.GetString("UserPass");
 
+        nextCanvas.SetActive(true);
 
-        HttpConector http = new HttpConector();
-        HttpItem r = http.Post(Const.LOGIN_URL, JsonUtility.ToJson(model));
-        Debug.Log(r.code);
-        Debug.Log(r.body);
-        Debug.Log("ConstURL is:" + Const.LOGIN_URL);
-
-        if (r.code == 200)
-        {
-            User u = JsonUtility.FromJson<User>(r.body);
-            //ユーザ情報を保持
-            u.username = useridInput.text;
-            u.password = passInput.text;
-            BaseController.SetUser(u);
-
-            Debug.Log(PlayerPrefs.GetString("TokenKey"));
-
-            SceneManager.LoadScene("ListScene");
-        }
-        else
-        {
-            nextCanvas.SetActive(false);
-            ViewLogin();
-        }
+        APIController.Login(model,
+            () => { SceneManager.LoadScene("ListScene"); },　//成功時一覧画面に遷移
+            () => { nextCanvas.SetActive(false);            //失敗時ログイン画面に遷移
+                    ViewLogin();
+            }
+            );
     }
 
 

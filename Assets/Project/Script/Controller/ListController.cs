@@ -31,6 +31,7 @@ public class ListController : BaseController {
     //テキスト管理
     private DialogController dialogView;
 
+    //アルバムの最大数を定数化
     public const int MAX = 3;
 	public static Frame[] list = new Frame[MAX];
 	public static int frame_idx = 0;
