@@ -47,6 +47,7 @@ public class DetailController : BaseController {
 			InitArrString (urls, frame.path_list);
 			InitArrInt (positions, frame.position_list);
 			InitArrInt (ids, frame.id_list);
+            title.text = frame.title;
             Debug.Log("test");
 
 			for (int i = 0; i < urls.Length; i++) {
@@ -203,7 +204,7 @@ public class DetailController : BaseController {
 	public void PushCommitButton()
 	{
 		frame.title = title.text;
-
+		Debug.Log(JsonUtility.ToJson(frame));
 		HttpConector http = new HttpConector ();
 		HttpItem r = http.Post (Const.FRAME_ADD_TITLE,JsonUtility.ToJson (frame));
 		Debug.Log (r.code);
@@ -211,11 +212,11 @@ public class DetailController : BaseController {
 
 		if (r.code == 200||r.code == 201 ) {
 			//サインイン画面に移動
-			Invoke ("ViewLogin", 1.0f);
+			dialogView.MessageView("タイトル変更完了しました。");
 
 		} else {
 			nextCanvas.SetActive (false);
-			Debug.Log ("タイトル変更に失敗しました。");
+            		dialogView.MessageView("タイトル変更に失敗しました。");
 		}
 
 		SceneManager.LoadScene ("ListScene"); 
