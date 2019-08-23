@@ -204,19 +204,19 @@ public class DetailController : BaseController {
 	public void PushCommitButton()
 	{
 		frame.title = title.text;
-        Debug.Log(JsonUtility.ToJson(frame));
-        HttpConector http = new HttpConector ();
+		Debug.Log(JsonUtility.ToJson(frame));
+		HttpConector http = new HttpConector ();
 		HttpItem r = http.Post (Const.FRAME_ADD_TITLE,JsonUtility.ToJson (frame));
 		Debug.Log (r.code);
 		Debug.Log (r.body);
 
 		if (r.code == 200||r.code == 201 ) {
 			//サインイン画面に移動
-			//Invoke ("ViewLogin", 1.0f);
+			dialogView.MessageView("タイトル変更完了しました。");
 
 		} else {
 			nextCanvas.SetActive (false);
-            dialogView.MessageView("タイトル変更に失敗しました。");
+            		dialogView.MessageView("タイトル変更に失敗しました。");
 		}
 
 		SceneManager.LoadScene ("ListScene"); 
