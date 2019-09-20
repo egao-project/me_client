@@ -94,7 +94,7 @@ public class APIController {
         }
     }
 
-    public static void Test1(Picture p, Picture pp, Texture2D texture, Frame frame, int index, UnityAction<string> successCall, UnityAction failedCall)
+    public static void ImageDelete(Picture p, Picture pp, Texture2D texture, Frame frame, int index, UnityAction<string> successCall, UnityAction failedCall)
     {
         HttpConector http = new HttpConector();
         if (p != null)
@@ -111,13 +111,13 @@ public class APIController {
         pp = JsonUtility.FromJson<Picture>(r.body);
     }
 
-    public static HttpItem Test2(UnityAction<string> successCall, UnityAction failedCall)
+    public static HttpItem GetFrameJson(UnityAction<string> successCall, UnityAction failedCall)
     {
         HttpConector http = new HttpConector();
         return http.Get(Const.FRAME_URL, "username=" + BaseController.user.username);
     }
 
-    public static void Test3(Frame[] list, int i, UnityAction<string> successCall, UnityAction failedCall)
+    public static void AddFrame(Frame[] list, int i, UnityAction<string> successCall, UnityAction failedCall)
     {
         HttpConector http = new HttpConector();
         HttpItem r = http.PostFrom(Const.FRAME_ADD_URL, BaseController.user.username, i);

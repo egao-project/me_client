@@ -46,13 +46,13 @@ public class ListController : BaseController {
         //TODO:Findで見つからなかった場合のInstantiate処理を行う
         dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
 
-        HttpItem r = APIController.Test2(null,
+        HttpItem r = APIController.GetFrameJson(null,
             () => {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
             });
 
-        JsonToFramList(r.body);
+        JsonToFrameList(r.body);
 
         int idx = 0;
 		foreach (Frame model in list) {
@@ -116,7 +116,7 @@ public class ListController : BaseController {
 		return clipTex;
 	}
 		
-	private void JsonToFramList (string json) 
+	private void JsonToFrameList (string json) 
 	{
 		string[] separator = new string[] {"},"};
 		string item = json;
@@ -160,7 +160,7 @@ public class ListController : BaseController {
 
 		Frame selected = list [i];
 		if (selected.id == null) {
-            APIController.Test3(list, i, null,
+            APIController.AddFrame(list, i, null,
             () => {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");

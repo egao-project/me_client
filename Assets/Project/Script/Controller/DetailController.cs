@@ -185,7 +185,7 @@ public class DetailController : BaseController {
 		Picture p = master [index];
         Picture pp = new Picture();
 
-        APIController.Test1(p, pp, texture, frame, index, null,
+        APIController.ImageDelete(p, pp, texture, frame, index, null,
             () => {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
