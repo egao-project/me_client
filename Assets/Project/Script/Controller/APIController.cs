@@ -94,5 +94,37 @@ public class APIController {
         }
     }
 
+    public static void Test1(Picture p, Picture pp, Texture2D texture, Frame frame, int index, UnityAction<string> successCall, UnityAction failedCall)
+    {
+        HttpConector http = new HttpConector();
+        if (p != null)
+        {
+            http.Delete(Const.PICTURE_DELETE_URL, p.id.ToString());
+        }
+        else
+        {
+            p = new Picture();
+        }
+
+        HttpItem r = http.PostImage(texture.EncodeToJPG(), frame.id, index);
+
+        pp = JsonUtility.FromJson<Picture>(r.body);
+    }
+
+    public static HttpItem Test2(UnityAction<string> successCall, UnityAction failedCall)
+    {
+        HttpConector http = new HttpConector();
+        return http.Get(Const.FRAME_URL, "username=" + BaseController.user.username);
+    }
+
+    public static void Test3(Frame[] list, int i, UnityAction<string> successCall, UnityAction failedCall)
+    {
+        HttpConector http = new HttpConector();
+        HttpItem r = http.PostFrom(Const.FRAME_ADD_URL, BaseController.user.username, i);
+        if (r.code == 200)
+        {
+            list[i] = JsonUtility.FromJson<Frame>(r.body);
+        }
+    }
 
 }

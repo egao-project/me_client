@@ -183,17 +183,14 @@ public class DetailController : BaseController {
 		//output.material.mainTexture = texture;
 
 		Picture p = master [index];
-		HttpConector http = new HttpConector ();
-		if (p != null) {
-			http.Delete (Const.PICTURE_DELETE_URL, p.id.ToString ());
-		} else {
-			p = new Picture();
-		}
+        Picture pp = new Picture();
 
-		HttpItem r = http.PostImage (texture.EncodeToJPG(), frame.id, index);
-
-		Picture pp = JsonUtility.FromJson<Picture> (r.body);
-
+        APIController.Test1(p, pp, texture, frame, index, null,
+            () => {
+                nextCanvas.SetActive(false);
+                Debug.Log("エラーが発生しました。");
+            });
+        
 		p.id = pp.id;
 		master [index] = p;
 
@@ -203,7 +200,7 @@ public class DetailController : BaseController {
 
 	public void PushCommitButton()
 	{
-		frame.title = title.text
+        frame.title = title.text;
         APIController.APIPost(Const.FRAME_ADD_TITLE, JsonUtility.ToJson(frame),null,
             () => {
                 nextCanvas.SetActive(false);
