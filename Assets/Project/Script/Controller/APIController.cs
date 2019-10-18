@@ -54,10 +54,10 @@ public class APIController {
     /// APIサーバに接続　GET
     /// </summary>
     /// <param name="url">URL.</param>
-    public void APIGet(string url , UnityAction<string> successCall, UnityAction failedCall)
+    public static void APIGet(string url , UnityAction<string> successCall, UnityAction failedCall)
     {
         HttpConector http = new HttpConector();
-        HttpItem r = http.Get(Const.FRAME_URL, "username=" + BaseController.user.username);
+        HttpItem r = http.Get(Const.FRAME_URL + url, "username=" + BaseController.user.username);
         Debug.Log(r.code);
         Debug.Log(r.body);
         Debug.Log("ConstURL is:" + Const.LOGIN_URL);
@@ -109,12 +109,6 @@ public class APIController {
         HttpItem r = http.PostImage(texture.EncodeToJPG(), frame.id, index);
 
         pp = JsonUtility.FromJson<Picture>(r.body);
-    }
-
-    public static HttpItem GetFrameJson(UnityAction<string> successCall, UnityAction failedCall)
-    {
-        HttpConector http = new HttpConector();
-        return http.Get(Const.FRAME_URL, "username=" + BaseController.user.username);
     }
 
     public static void AddFrame(Frame[] list, int i, UnityAction<string> successCall, UnityAction failedCall)

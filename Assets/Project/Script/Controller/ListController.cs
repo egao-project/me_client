@@ -46,13 +46,15 @@ public class ListController : BaseController {
         //TODO:Findで見つからなかった場合のInstantiate処理を行う
         dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
 
-        HttpItem r = APIController.GetFrameJson(null,
+        APIController.APIGet(Const.FRAME_URL,
+            value => {
+                JsonToFrameList(value);
+            },
             () => {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
-            });
-
-        JsonToFrameList(r.body);
+            }
+        );
 
         int idx = 0;
 		foreach (Frame model in list) {
