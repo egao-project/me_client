@@ -117,7 +117,11 @@ public class APIController {
         HttpItem r = http.PostFrom(Const.FRAME_ADD_URL, BaseController.user.username, i);
         if (r.code == 200)
         {
-            list[i] = JsonUtility.FromJson<Frame>(r.body);
+            successCall(r.body);
+        }
+        else
+        {
+            failedCall();
         }
     }
 

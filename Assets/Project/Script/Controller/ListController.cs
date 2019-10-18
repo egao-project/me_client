@@ -156,16 +156,19 @@ public class ListController : BaseController {
 
     }
 
-	public void OnPressFilesButton(int i)
+    public void OnPressFilesButton(int i)
 	{
 		frame_idx = i;
 
 		Frame selected = list [i];
 		if (selected.id == null) {
-            APIController.AddFrame(list, i, null,
-            () => {
-                nextCanvas.SetActive(false);
-                Debug.Log("エラーが発生しました。");
+            APIController.AddFrame(list,i,
+                value => {
+                    list[i] = JsonUtility.FromJson<Frame>(value);
+                },
+                () => {
+                    nextCanvas.SetActive(false);
+                    Debug.Log("エラーが発生しました。");
             });
         }
 		SceneManager.LoadScene ("DetailScene"); 
