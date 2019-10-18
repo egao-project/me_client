@@ -184,14 +184,31 @@ public class DetailController : BaseController {
 
 		Picture p = master [index];
         Picture pp = new Picture();
-
-        APIController.ImageDelete(p, pp, texture, frame, index, null,
+        if(p != null)
+        {
+            APIController.ImageDelete(p, pp, texture, frame, index, null,
             () => {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
             });
+        }
+        else
+        {
+            p = new Picture();
+        }
+
+        APIController.PostImage(texture.EncodeToJPG(), frame.id, index,
+            value =>
+            {
+                pp = JsonUtility.FromJson<Picture>(value);
+            },
+            () =>
+            {
+                nextCanvas.SetActive(false);
+                Debug.Log("エラーが発生しました。");
+            });
         
-		p.id = pp.id;
+        p.id = pp.id;
 		master [index] = p;
 
 		nextCanvas.SetActive (false);

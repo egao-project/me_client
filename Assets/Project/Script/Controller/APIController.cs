@@ -94,24 +94,37 @@ public class APIController {
         }
     }
 
-    public static void ImageDelete(Picture p, Picture pp, Texture2D texture, Frame frame, int index, UnityAction<string> successCall, UnityAction failedCall)
+    public static HttpItem ImageDelete(Picture p, Picture pp, Texture2D texture, Frame frame, int index, UnityAction<string> successCall, UnityAction failedCall)
     {
-        HttpConector http = new HttpConector();
-        if (p != null)
-        {
-            http.Delete(Const.PICTURE_DELETE_URL, p.id.ToString());
-        }
-        else
-        {
-            p = new Picture();
-        }
+		HttpConector http = new HttpConector();
+        HttpItem r = http.Delete(Const.PICTURE_DELETE_URL, p.id.ToString());
+		if (r.code == 200)
+		{
+			successCall(r.body);
+		}
+		else
+		{
+			failedCall();
+		}
 
-        HttpItem r = http.PostImage(texture.EncodeToJPG(), frame.id, index);
 
-        pp = JsonUtility.FromJson<Picture>(r.body);
-    }
+	}
 
-    public static void AddFrame(Frame[] list, int i, UnityAction<string> successCall, UnityAction failedCall)
+	public static void ImagePost(byte[] img, string frame_id, int position, UnityAction<string> successCall, UnityAction failedCall)
+	{
+		HttpConector http = new HttpConector();
+		HttpItem r = http.PostImage(img.EncodeToJPG(), frame_id, position);
+		if (r.code == 200)
+		{
+			successCall(r.body);
+		}
+		else
+		{
+			failedCall();
+		}
+	}
+
+	public static void AddFrame(Frame[] list, int i, UnityAction<string> successCall, UnityAction failedCall)
     {
         HttpConector http = new HttpConector();
         HttpItem r = http.PostFrom(Const.FRAME_ADD_URL, BaseController.user.username, i);
