@@ -54,7 +54,7 @@ public class APIController {
     /// APIサーバに接続　GET
     /// </summary>
     /// <param name="url">URL.</param>
-    public void APILoad(string url , UnityAction<string> successCall, UnityAction failedCall)
+    public void APIGet(string url , UnityAction<string> successCall, UnityAction failedCall)
     {
         HttpConector http = new HttpConector();
         HttpItem r = http.Get(Const.FRAME_URL, "username=" + BaseController.user.username);
