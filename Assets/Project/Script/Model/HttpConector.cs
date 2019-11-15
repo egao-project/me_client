@@ -40,7 +40,9 @@ public class HttpConector {
 		}
 
 		if (request.isNetworkError)
+		{
 			Debug.Log (request.error);
+		}
 
 		HttpItem ret = new HttpItem ();
 		ret.code = request.responseCode;
