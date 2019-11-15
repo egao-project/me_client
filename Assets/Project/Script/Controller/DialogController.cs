@@ -58,7 +58,7 @@ public class DialogController : MonoBehaviour {
     public void MessageView(string msg = "")
     {
             MessageLoadingObject.SetActive(true);
-            MessageText.text = msg;
+            MessageText.text = msg + "\n\nTap";
     }
 
     // <summary>
