@@ -186,7 +186,7 @@ public class DetailController : BaseController {
         Picture pp = new Picture();
         if(p != null)
         {
-            APIController.ImageDelete(p, pp, texture, frame, index, null,
+            APIController.ImageDelete(p, null,
             () => {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
@@ -197,7 +197,7 @@ public class DetailController : BaseController {
             p = new Picture();
         }
 
-        APIController.PostImage(texture.EncodeToJPG(), frame.id, index,
+        APIController.ImagePost(texture, frame.id, index,
             value =>
             {
                 pp = JsonUtility.FromJson<Picture>(value);

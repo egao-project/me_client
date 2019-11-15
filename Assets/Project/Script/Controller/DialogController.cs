@@ -70,11 +70,4 @@ public class DialogController : MonoBehaviour {
         MessageLoadingObject.SetActive(false);
         MessageText.text = "";
     }
-
-
-
-
-
-
-
 }

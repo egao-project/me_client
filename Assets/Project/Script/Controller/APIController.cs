@@ -94,7 +94,7 @@ public class APIController {
         }
     }
 
-    public static HttpItem ImageDelete(Picture p, Picture pp, Texture2D texture, Frame frame, int index, UnityAction<string> successCall, UnityAction failedCall)
+    public static void ImageDelete(Picture p, UnityAction<string> successCall, UnityAction failedCall)
     {
 		HttpConector http = new HttpConector();
         HttpItem r = http.Delete(Const.PICTURE_DELETE_URL, p.id.ToString());
@@ -106,11 +106,9 @@ public class APIController {
 		{
 			failedCall();
 		}
-
-
 	}
 
-	public static void ImagePost(byte[] img, string frame_id, int position, UnityAction<string> successCall, UnityAction failedCall)
+	public static void ImagePost(Texture2D img, string frame_id, int position, UnityAction<string> successCall, UnityAction failedCall)
 	{
 		HttpConector http = new HttpConector();
 		HttpItem r = http.PostImage(img.EncodeToJPG(), frame_id, position);

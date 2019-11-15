@@ -39,7 +39,7 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
 			Debug.Log (request.error);
 
 		HttpItem ret = new HttpItem ();
@@ -75,7 +75,7 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
 			Debug.Log (request.error);
 
 		HttpItem ret = new HttpItem ();
@@ -106,7 +106,7 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
 			Debug.Log (request.error);
 
 		HttpItem ret = new HttpItem ();
@@ -142,7 +142,7 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
 			Debug.Log (request.error);
 
 		HttpItem ret = new HttpItem ();
