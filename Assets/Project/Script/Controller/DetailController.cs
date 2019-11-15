@@ -6,188 +6,204 @@ using Kakera;
 using UnityEngine.SceneManagement;
 using System.Threading;
 
-public class DetailController : BaseController {
+public class DetailController : BaseController
+{
 
-	[SerializeField] private GameObject nextCanvas;
+    [SerializeField] private GameObject nextCanvas;
 
-	[SerializeField]
-	private Unimgpicker imagePicker;
+    [SerializeField]
+    private Unimgpicker imagePicker;
 
-	[SerializeField]
-	private Image[] imageRenderer = new Image[5];
+    [SerializeField]
+    private Image[] imageRenderer = new Image[5];
 
-	[SerializeField]
-	private Text title;
+    [SerializeField]
+    private Text title;
 
-	[SerializeField]
-	private Image[] imageSampleRenderer = new Image[5];
+    [SerializeField]
+    private Image[] imageSampleRenderer = new Image[5];
 
-	private int index;
+    private int index;
 
     //ダイアログ表示クラス
     private DialogController dialogView;
 
     private string[] urls = new string[5];
-	private int[] positions = new int[5];
-	private int[] ids = new int[5];
-	private Picture[] master = new Picture[5];
-	private Frame frame = ListController.list [ListController.frame_idx];
+    private int[] positions = new int[5];
+    private int[] ids = new int[5];
+    private Picture[] master = new Picture[5];
+    private Frame frame = ListController.list[ListController.frame_idx];
 
-	// Use this for initialization
-	IEnumerator Start () {
-		base.Start ();
-		nextCanvas.SetActive (true);
+    // Use this for initialization
+    IEnumerator Start()
+    {
+        base.Start();
+        nextCanvas.SetActive(true);
 
         //シングルトンで表示されているDialogViewerを取得
         //TODO:Findで見つからなかった場合のInstantiate処理を行う
         dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
 
-        if (frame.path_list != null && frame.path_list != "") {
-			urls = frame.path_list.Split (',');
-			InitArrString (urls, frame.path_list);
-			InitArrInt (positions, frame.position_list);
-			InitArrInt (ids, frame.id_list);
+        if (frame.path_list != null && frame.path_list != "")
+        {
+            urls = frame.path_list.Split(',');
+            InitArrString(urls, frame.path_list);
+            InitArrInt(positions, frame.position_list);
+            InitArrInt(ids, frame.id_list);
             title.text = frame.title;
             Debug.Log("test");
 
-			for (int i = 0; i < urls.Length; i++) {
-				Picture p = new Picture ();
-				p.position = positions [i];
-				p.id = ids [i];
-				p.image = urls [i];
-				master [p.position] = p;
-			}
+            for (int i = 0; i < urls.Length; i++)
+            {
+                Picture p = new Picture();
+                p.position = positions[i];
+                p.id = ids[i];
+                p.image = urls[i];
+                master[p.position] = p;
+            }
 
-			int idx = 0;
-			WWW www = null;
-			foreach (string u in urls) {
-				string tmp = u.Trim ();
-				www = new WWW (tmp);
-				// 画像ダウンロード完了を待機
-				yield return www;
-				var texture = www.texture;
-				float x = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.x;
-				float y = imageRenderer [positions [idx]].transform.GetComponent<RectTransform> ().sizeDelta.y;
+            int idx = 0;
+            WWW www = null;
+            foreach (string u in urls)
+            {
+                string tmp = u.Trim();
+                www = new WWW(tmp);
+                // 画像ダウンロード完了を待機
+                yield return www;
+                var texture = www.texture;
+                float x = imageRenderer[positions[idx]].transform.GetComponent<RectTransform>().sizeDelta.x;
+                float y = imageRenderer[positions[idx]].transform.GetComponent<RectTransform>().sizeDelta.y;
 
-				float bX, bY;
+                float bX, bY;
 
-				bX = x;
-				if (texture.width < x) {
-					bX = texture.width;
-				}
-				bY = y;
-				if (texture.height < y) {
-					bY = texture.height;
-				}
+                bX = x;
+                if (texture.width < x)
+                {
+                    bX = texture.width;
+                }
+                bY = y;
+                if (texture.height < y)
+                {
+                    bY = texture.height;
+                }
 
-				var tmpTexture = getCenterClippedTexture (texture, (int)bX, (int)bY);
-				imageRenderer [positions [idx]].sprite = 
-					Sprite.Create (tmpTexture, new Rect (0, 0, bX, bY), Vector2.zero);
-				imageSampleRenderer [positions [idx]].sprite = 
-					Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
-				
-				idx++;
-				www = null;
-			}
-		}
-		nextCanvas.SetActive (false);
+                var tmpTexture = getCenterClippedTexture(texture, (int)bX, (int)bY);
+                imageRenderer[positions[idx]].sprite =
+                    Sprite.Create(tmpTexture, new Rect(0, 0, bX, bY), Vector2.zero);
+                imageSampleRenderer[positions[idx]].sprite =
+                    Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
 
-	}
-	Texture2D getCenterClippedTexture(Texture2D texture,int x,int y)
-	{
-		Color[] pixel;
-		Texture2D clipTex;
-		int tw = texture.width;
-		int th = texture.height;
-		// GetPixels (x, y, width, height) で切り出せる
-		pixel = texture.GetPixels(0, 0, x, y);
-		// 横幅，縦幅を指定してTexture2Dを生成
-		clipTex = new Texture2D(x, y); 
-		clipTex.SetPixels(pixel);
-		clipTex.Apply();
-		return clipTex;
-	}
+                idx++;
+                www = null;
+            }
+        }
+        nextCanvas.SetActive(false);
 
-	// Update is called once per frame
-	void Update () {
+    }
+    Texture2D getCenterClippedTexture(Texture2D texture, int x, int y)
+    {
+        Color[] pixel;
+        Texture2D clipTex;
+        int tw = texture.width;
+        int th = texture.height;
+        // GetPixels (x, y, width, height) で切り出せる
+        pixel = texture.GetPixels(0, 0, x, y);
+        // 横幅，縦幅を指定してTexture2Dを生成
+        clipTex = new Texture2D(x, y);
+        clipTex.SetPixels(pixel);
+        clipTex.Apply();
+        return clipTex;
+    }
 
-	}
+    // Update is called once per frame
+    void Update()
+    {
 
-	void Awake()
-	{
-		imagePicker.Completed += (string path) =>
-		{
-			StartCoroutine(LoadImage(path, imageRenderer[index]));
-		};
-	}
+    }
 
-	public void OnPressShowPicker(int i)
-	{
-		index = i;
-		imagePicker.Show("Select Image", "unimgpicker", 1024);
-	}
+    void Awake()
+    {
+        imagePicker.Completed += (string path) =>
+        {
+            StartCoroutine(LoadImage(path, imageRenderer[index]));
+        };
+    }
 
-	private IEnumerator LoadImage(string path, Image output)
-	{
-		nextCanvas.SetActive (true);
+    public void OnPressShowPicker(int i)
+    {
+        index = i;
+        imagePicker.Show("Select Image", "unimgpicker", 1024);
+    }
 
-		var url = "file://" + path;
-		var www = new WWW(url);
-		yield return www;
+    private IEnumerator LoadImage(string path, Image output)
+    {
+        nextCanvas.SetActive(true);
 
-		var texture = www.texture;
-		if (texture == null)
-		{
-			Debug.LogError("Failed to load texture url:" + url);
-		}
+        var url = "file://" + path;
+        var www = new WWW(url);
+        yield return www;
 
-		//output.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
-		float x = imageRenderer [positions [index]].transform.GetComponent<RectTransform> ().sizeDelta.x;
-		float y = imageRenderer [positions [index]].transform.GetComponent<RectTransform> ().sizeDelta.y;
+        var texture = www.texture;
+        if (texture == null)
+        {
+            Debug.LogError("Failed to load texture url:" + url);
+        }
 
-		float bX, bY;
+        //output.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        float x = imageRenderer[positions[index]].transform.GetComponent<RectTransform>().sizeDelta.x;
+        float y = imageRenderer[positions[index]].transform.GetComponent<RectTransform>().sizeDelta.y;
 
-		if (x > y) {
-			float gen = texture.width / x;
-			bX = x;
-			bY = y * gen;
-		} else {
-			float gen = texture.height / y;
-			bX = x * gen;
-			bY = y;
-		}
+        float bX, bY;
 
-		float bix = 0.1f;
-		while (true) {
-			if (texture.width * bix < 900) {
-				bix = bix + 0.1f;
-			} else {
-				break;
-			}
-		}
+        if (x > y)
+        {
+            float gen = texture.width / x;
+            bX = x;
+            bY = y * gen;
+        }
+        else
+        {
+            float gen = texture.height / y;
+            bX = x * gen;
+            bY = y;
+        }
 
-		bX = texture.width * bix;
-		bY = texture.height * bix;
-		Debug.LogError(bX);
-		Debug.LogError(bY);
+        float bix = 0.1f;
+        while (true)
+        {
+            if (texture.width * bix < 900)
+            {
+                bix = bix + 0.1f;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        bX = texture.width * bix;
+        bY = texture.height * bix;
+        Debug.LogError(bX);
+        Debug.LogError(bY);
 
 
-		TextureScale.Bilinear(texture,(int)bX, (int)bY);
-		var tmpTexture = getCenterClippedTexture (texture, (int)x, (int)y);
+        TextureScale.Bilinear(texture, (int)bX, (int)bY);
+        var tmpTexture = getCenterClippedTexture(texture, (int)x, (int)y);
 
-		output.sprite = 
-			Sprite.Create (tmpTexture, new Rect (0, 0, x, y), Vector2.zero);
-		imageSampleRenderer [index].sprite = 
-			Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), Vector2.zero);
-		//output.SetNativeSize ();
-		//output.material.mainTexture = texture;
+        output.sprite =
+            Sprite.Create(tmpTexture, new Rect(0, 0, x, y), Vector2.zero);
+        imageSampleRenderer[index].sprite =
+            Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+        //output.SetNativeSize ();
+        //output.material.mainTexture = texture;
 
-		Picture p = master [index];
+        Picture p = master[index];
         Picture pp = new Picture();
-        if(p != null)
+        if (p != null)
         {
             APIController.ImageDelete(p, null,
-            () => {
+            () =>
+            {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
             });
@@ -207,39 +223,42 @@ public class DetailController : BaseController {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
             });
-        
+
         p.id = pp.id;
-		master [index] = p;
+        master[index] = p;
 
-		nextCanvas.SetActive (false);
+        nextCanvas.SetActive(false);
 
-	}
+    }
 
-	public void PushCommitButton()
-	{
+    public void PushCommitButton()
+    {
         frame.title = title.text;
-        APIController.APIPost(Const.FRAME_ADD_TITLE, JsonUtility.ToJson(frame),null,
-            () => {
+        APIController.APIPost(Const.FRAME_ADD_TITLE, JsonUtility.ToJson(frame), null,
+            () =>
+            {
                 nextCanvas.SetActive(false);
                 Debug.Log("エラーが発生しました。");
             });
-		SceneManager.LoadScene ("ListScene"); 
-	}
+        SceneManager.LoadScene("ListScene");
+    }
 
-	private void InitArrString(string[] arr,string list)
-	{
-		int idx = 0;
-		foreach (string item in list.Split (',')) {
-			arr[idx] = item;
-			idx++;
-		}
-	}
-	private void InitArrInt(int[] arr,string list)
-	{
-		int idx = 0;
-		foreach (string item in list.Split (',')) {
-			arr[idx] = int.Parse(item);
-			idx++;
-		}
-	}
+    private void InitArrString(string[] arr, string list)
+    {
+        int idx = 0;
+        foreach (string item in list.Split(','))
+        {
+            arr[idx] = item;
+            idx++;
+        }
+    }
+    private void InitArrInt(int[] arr, string list)
+    {
+        int idx = 0;
+        foreach (string item in list.Split(','))
+        {
+            arr[idx] = int.Parse(item);
+            idx++;
+        }
+    }
 }
