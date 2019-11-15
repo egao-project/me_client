@@ -183,18 +183,32 @@ public class DetailController : BaseController {
 		//output.material.mainTexture = texture;
 
 		Picture p = master [index];
-		HttpConector http = new HttpConector ();
-		if (p != null) {
-			http.Delete (Const.PICTURE_DELETE_URL, p.id.ToString ());
-		} else {
-			p = new Picture();
-		}
+        Picture pp = new Picture();
+        if(p != null)
+        {
+            APIController.ImageDelete(p, pp, texture, frame, index, null,
+            () => {
+                nextCanvas.SetActive(false);
+                Debug.Log("エラーが発生しました。");
+            });
+        }
+        else
+        {
+            p = new Picture();
+        }
 
-		HttpItem r = http.PostImage (texture.EncodeToJPG(), frame.id, index);
-
-		Picture pp = JsonUtility.FromJson<Picture> (r.body);
-
-		p.id = pp.id;
+        APIController.PostImage(texture.EncodeToJPG(), frame.id, index,
+            value =>
+            {
+                pp = JsonUtility.FromJson<Picture>(value);
+            },
+            () =>
+            {
+                nextCanvas.SetActive(false);
+                Debug.Log("エラーが発生しました。");
+            });
+        
+        p.id = pp.id;
 		master [index] = p;
 
 		nextCanvas.SetActive (false);
@@ -203,22 +217,12 @@ public class DetailController : BaseController {
 
 	public void PushCommitButton()
 	{
-		frame.title = title.text;
-		Debug.Log(JsonUtility.ToJson(frame));
-		HttpConector http = new HttpConector ();
-		HttpItem r = http.Post (Const.FRAME_ADD_TITLE,JsonUtility.ToJson (frame));
-		Debug.Log (r.code);
-		Debug.Log (r.body);
-
-		if (r.code == 200||r.code == 201 ) {
-			//サインイン画面に移動
-			dialogView.MessageView("タイトル変更完了しました。");
-
-		} else {
-			nextCanvas.SetActive (false);
-            		dialogView.MessageView("タイトル変更に失敗しました。");
-		}
-
+        frame.title = title.text;
+        APIController.APIPost(Const.FRAME_ADD_TITLE, JsonUtility.ToJson(frame),null,
+            () => {
+                nextCanvas.SetActive(false);
+                Debug.Log("エラーが発生しました。");
+            });
 		SceneManager.LoadScene ("ListScene"); 
 	}
 

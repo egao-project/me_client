@@ -31,6 +31,7 @@ public class ListController : BaseController {
     //テキスト管理
     private DialogController dialogView;
 
+    //アルバムの最大数を定数化
     public const int MAX = 3;
 	public static Frame[] list = new Frame[MAX];
 	public static int frame_idx = 0;
@@ -45,11 +46,17 @@ public class ListController : BaseController {
         //TODO:Findで見つからなかった場合のInstantiate処理を行う
         dialogView = GameObject.Find("DialogViewer").GetComponent<DialogController>();
 
-        HttpConector http = new HttpConector ();
-		HttpItem r = http.Get (Const.FRAME_URL,"username="+BaseController.user.username);
-		JsonToFramList(r.body);
+        APIController.APIGet(Const.FRAME_URL,
+            value => {
+                JsonToFrameList(value);
+            },
+            () => {
+                nextCanvas.SetActive(false);
+                Debug.Log("エラーが発生しました。");
+            }
+        );
 
-		int idx = 0;
+        int idx = 0;
 		foreach (Frame model in list) {
 
 
@@ -111,7 +118,7 @@ public class ListController : BaseController {
 		return clipTex;
 	}
 		
-	private void JsonToFramList (string json) 
+	private void JsonToFrameList (string json) 
 	{
 		string[] separator = new string[] {"},"};
 		string item = json;
@@ -149,18 +156,21 @@ public class ListController : BaseController {
 
     }
 
-	public void OnPressFilesButton(int i)
+    public void OnPressFilesButton(int i)
 	{
 		frame_idx = i;
 
 		Frame selected = list [i];
 		if (selected.id == null) {
-			HttpConector http = new HttpConector ();
-			HttpItem r = http.PostFrom (Const.FRAME_ADD_URL, BaseController.user.username, i);
-			if (r.code == 200) {
-				list[i] = JsonUtility.FromJson<Frame> (r.body);
-			}
-		}
+            APIController.AddFrame(list,i,
+                value => {
+                    list[i] = JsonUtility.FromJson<Frame>(value);
+                },
+                () => {
+                    nextCanvas.SetActive(false);
+                    Debug.Log("エラーが発生しました。");
+            });
+        }
 		SceneManager.LoadScene ("DetailScene"); 
 	}
 
