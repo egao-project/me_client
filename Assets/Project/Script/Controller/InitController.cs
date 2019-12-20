@@ -87,7 +87,7 @@ public class InitController : BaseController
         model.email = registEmailInput.text;
 
         //API処理
-        APIController.APIPost(Const.FRAME_ADD_TITLE, JsonUtility.ToJson(model),
+        APIController.APIPost(Const.REGISTER, JsonUtility.ToJson(model),
             value =>
             {
                 //次回アプリ起動時ログイン画面に遷移するための仮トークンキー
