@@ -87,11 +87,15 @@ public class APIController
         Debug.Log("ConstURL is:" + Const.LOGIN_URL);
         if (r.code == 200 || r.code == 201)
         {
-            successCall(r.body);
+            if (successCall != null) {
+                successCall(r.body);
+            }
         }
         else
         {
-            failedCall();
+            if (successCall != null) {
+                failedCall();
+            }
         }
     }
 
@@ -101,11 +105,15 @@ public class APIController
         HttpItem r = http.Delete(Const.PICTURE_DELETE_URL, p.id.ToString());
         if (r.code == 200)
         {
-            successCall(r.body);
+            if (successCall != null) {
+                successCall(r.body);
+            }
         }
         else
         {
-            failedCall();
+            if (successCall != null) {
+                failedCall();
+            }
         }
     }
 
@@ -115,11 +123,15 @@ public class APIController
         HttpItem r = http.PostImage(img.EncodeToJPG(), frame_id, position);
         if (r.code == 200)
         {
-            successCall(r.body);
+            if (successCall != null) {
+                successCall(r.body);
+            }
         }
         else
         {
-            failedCall();
+            if (successCall != null) {
+                failedCall();
+            }
         }
     }
 
@@ -129,11 +141,15 @@ public class APIController
         HttpItem r = http.PostFrom(Const.FRAME_ADD_URL, BaseController.user.username, i);
         if (r.code == 200)
         {
-            successCall(r.body);
+            if (successCall != null) {
+                successCall(r.body);
+            }
         }
         else
         {
-            failedCall();
+            if (successCall != null) {
+                failedCall();
+            }
         }
     }
 
