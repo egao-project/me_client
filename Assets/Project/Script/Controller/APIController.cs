@@ -58,7 +58,7 @@ public class APIController
     public static void APIGet(string url, UnityAction<string> successCall, UnityAction failedCall)
     {
         HttpConector http = new HttpConector();
-        HttpItem r = http.Get(Const.FRAME_URL + url, "username=" + BaseController.user.username);
+        HttpItem r = http.Get(url, "username=" + BaseController.user.username);
         Debug.Log(r.code);
         Debug.Log(r.body);
         Debug.Log("ConstURL is:" + Const.LOGIN_URL);
