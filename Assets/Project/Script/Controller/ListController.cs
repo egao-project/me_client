@@ -128,6 +128,12 @@ public class ListController : BaseController
 
     private void JsonToFrameList(string json)
     {
+        // まずは初期化
+        for (int i = 0; i < MAX; i++)
+        {
+            list[i] = new Frame();
+        }
+
         string[] separator = new string[] { "}," };
         string item = json;
 
@@ -149,11 +155,6 @@ public class ListController : BaseController
                 idx++;
             }
         }
-        for (int i = idx; i < MAX; i++)
-        {
-            list[i] = new Frame();
-        }
-
     }
 
     public void OnPressCopyBorad(int i)
