@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogController : MonoBehaviour {
+public class DialogController : MonoBehaviour
+{
 
     [SerializeField] private GameObject APILoadingObject;
     [SerializeField] private GameObject SceneLoadingObject;
@@ -57,8 +58,8 @@ public class DialogController : MonoBehaviour {
     /// <param name="view">If set to <c>true</c> view.</param>
     public void MessageView(string msg = "")
     {
-            MessageLoadingObject.SetActive(true);
-            MessageText.text = msg + "\n\nTap";
+        MessageLoadingObject.SetActive(true);
+        MessageText.text = msg + "\n\nTap";
     }
 
     // <summary>
@@ -70,11 +71,4 @@ public class DialogController : MonoBehaviour {
         MessageLoadingObject.SetActive(false);
         MessageText.text = "";
     }
-
-
-
-
-
-
-
 }

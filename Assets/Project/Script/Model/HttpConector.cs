@@ -39,8 +39,10 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
+		{
 			Debug.Log (request.error);
+		}
 
 		HttpItem ret = new HttpItem ();
 		ret.code = request.responseCode;
@@ -49,6 +51,7 @@ public class HttpConector {
 		return ret;
 	}
 
+	
 	public HttpItem Do(string url,string json,string method) {
 		var request = new UnityWebRequest(url, method);
 		if (json != null) {
@@ -75,8 +78,10 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
+		{
 			Debug.Log (request.error);
+		}
 
 		HttpItem ret = new HttpItem ();
 		ret.code = request.responseCode;
@@ -106,8 +111,10 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
+		{
 			Debug.Log (request.error);
+		}
 
 		HttpItem ret = new HttpItem ();
 		ret.code = request.responseCode;
@@ -142,8 +149,10 @@ public class HttpConector {
 			count++;
 		}
 
-		if (request.isError)
+		if (request.isNetworkError)
+		{
 			Debug.Log (request.error);
+		}
 
 		HttpItem ret = new HttpItem ();
 		ret.code = request.responseCode;
